@@ -1,73 +1,78 @@
 // services/api.js
-import express from 'express';
-import { Pool } from 'pg';
+import axios from 'axios';
 
-const router = express.Router();
-
-const pool = new Pool({
-  user: 'laode.alif',
-  host: 'ep-wild-shadow-492151.ap-southeast-1.aws.neon.tech',
-  database: 'animehub',
-  password: 'Fm8Wq6ITNhkH',
-  port: '5432',
-  ssl: true,
-});
-
-router.get('/getAllAnime', async (req, res) => {
-  try {
-    const query = 'SELECT * FROM allanime;';
-    const client = await pool.connect();
-    const result = await client.query(query);
-    client.release();
-    res.status(200).json(result.rows);
-  } catch (error) {
-    console.error('Error fetching anime data:', error);
-    res.status(500).json({ error: 'An error occurred' });
+class Api {
+  async getAllAnime() {
+    try {
+      const response = await axios.get('/api/getAllAnime');
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching anime data:', error);
+      throw error;
+    }
   }
-});
 
-router.get('/getAnime/:id', async (req, res) => {
-  const { id } = req.params;
-  try {
-    const query = 'SELECT * FROM anime WHERE animeid = $1;';
-    const client = await pool.connect();
-    const result = await client.query(query, [id]);
-    client.release();
-    res.status(200).json(result.rows[0]);
-  } catch (error) {
-    console.error(`Error fetching anime with ID ${id}:`, error);
-    res.status(500).json({ error: 'An error occurred' });
+  async getAnime(animeId) {
+    try {
+      const response = await axios.get(`/api/getAnime/${animeId}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Error fetching anime with ID ${animeId}:`, error);
+      throw error;
+    }
   }
-});
 
-router.get('/getAnimeDetails/:id', async (req, res) => {
-  const { id } = req.params;
-  try {
-    const query = 'SELECT * FROM animedetail WHERE animeid = $1;';
-    const client = await pool.connect();
-    const result = await client.query(query, [id]);
-    client.release();
-    res.status(200).json(result.rows[0]);
-  } catch (error) {
-    console.error(`Error fetching anime details with ID ${id}:`, error);
-    res.status(500).json({ error: 'An error occurred' });
+  async getAnimeDetails(animeId) {
+    try {
+      const response = await axios.get(`/api/getAnimeDetails/${animeId}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Error fetching anime details with ID ${animeId}:`, error);
+      throw error;
+    }
   }
-});
 
-router.get('/getAnimeReviews/:id', async (req, res) => {
-  const { id } = req.params;
-  try {
-    const query = 'SELECT * FROM animereview WHERE animeid = $1;';
-    const client = await pool.connect();
-    const result = await client.query(query, [id]);
-    client.release();
-    res.status(200).json(result.rows);
-  } catch (error) {
-    console.error(`Error fetching anime reviews with ID ${id}:`, error);
-    res.status(500).json({ error: 'An error occurred' });
+  async getAnimeReviews(animeId) {
+    try {
+      const response = await axios.get(`/api/getAnimeReviews/${animeId}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Error fetching anime reviews with ID ${animeId}:`, error);
+      throw error;
+    }
   }
-});
 
-// Add more API routes as needed
+  async getAnimeSynopsis(animeId) {
+    try {
+      const response = await axios.get(`/api/getAnimeSynopsis/${animeId}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Error fetching anime synopsis with ID ${animeId}:`, error);
+      throw error;
+    }
+  }
 
-export default router;
+  async getAnimeImage(animeId) {
+    try {
+      const response = await axios.get(`/api/getAnimeImage/${animeId}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Error fetching anime image with ID ${animeId}:`, error);
+      throw error;
+    }
+  }
+
+  async getComments(animeId) {
+    try {
+      const response = await axios.get(`/api/getComments/${animeId}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Error fetching comments with anime ID ${animeId}:`, error);
+      throw error;
+    }
+  }
+}
+
+const apiInstance = new Api(); // Create an instance of the Api class
+
+export default apiInstance;

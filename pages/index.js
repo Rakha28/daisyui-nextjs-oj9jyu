@@ -1,28 +1,8 @@
 // pages/index.js
 import React, { useEffect, useState } from 'react';
 import Card from '../components/Card/Card';
-import apiRouter from '../services/api';
-import express from 'express';
-import next from 'next';
 
-const dev = process.env.NODE_ENV !== 'production';
-const app = next({ dev });
-const handle = app.getRequestHandler();
-
-app.prepare().then(() => {
-  const server = express();
-
-  server.use('/api', apiRouter);
-
-  server.get('*', (req, res) => {
-    return handle(req, res);
-  });
-
-  server.listen(3000, (err) => {
-    if (err) throw err;
-    console.log('> Ready on http://localhost:3000');
-  });
-});
+import apiInstance from '../services/api';
 
 const HomePage = () => {
   const [animeData, setAnimeData] = useState([]);
@@ -30,8 +10,7 @@ const HomePage = () => {
   useEffect(() => {
     const fetchAnimeData = async () => {
       try {
-        const response = await fetch('/api/getAllAnime');
-        const data = await response.json();
+        const data = await apiInstance.getAllAnime();
         setAnimeData(data);
       } catch (error) {
         console.error('Error fetching anime data:', error);
