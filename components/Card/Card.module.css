@@ -1,0 +1,25 @@
+/* Card.module.css */
+
+.container {
+  width: 45vw;
+}
+
+.container + .container {
+  margin-left: 0.5rem;
+}
+
+.container button {
+  height: 100%;
+  cursor: pointer;
+  transition: transform ease 200ms;
+}
+
+.container button:hover {
+  transform: scale(1.1);
+}
+
+.container img {
+  max-width: 100%;
+  min-height: 100%;
+  object-fit: cover;
+}
